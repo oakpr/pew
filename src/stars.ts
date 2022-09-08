@@ -1,4 +1,4 @@
-const stars_count = 1000;
+const stars_count = 60;
 let stars: Star[] = []
 
 export let speed_fac = 1.0;
