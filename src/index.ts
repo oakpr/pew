@@ -1,6 +1,6 @@
 // If the browser doesn't support gamepads, there's no point in showing co-op options.
 export const co_op_supported = !!navigator.getGamepads();
-export const viewport: CanvasRenderingContext2D = (document.querySelector("canvas#viewport") as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D;
+export const ctx: CanvasRenderingContext2D = (document.querySelector("canvas#viewport") as HTMLCanvasElement).getContext('2d') as CanvasRenderingContext2D;
 export const display_width = 480;
 export const display_height = 640;
 
@@ -11,11 +11,14 @@ export let paused: boolean = false;
 let last_frame = Date.now()
 
 import type { Entity } from './entity.js';
+import { reset } from './gfx.js';
 import { draw_hud } from './hud.js';
+import { tick_player_input } from './player_input.js';
 import { draw_stars } from './stars.js'
 
 // The main game loop
 while (true) {
+	reset(ctx)
 	// Wait for a frame to draw
 	await new Promise(r => window.requestAnimationFrame(r));
 	// Get delta time
@@ -23,17 +26,17 @@ while (true) {
 	const delta = now - last_frame;
 	last_frame = now;
 	// Clear viewport
-	viewport.fillStyle = "black";
-	viewport.fillRect(0, 0, 480, 640);
+	ctx.fillStyle = "black";
+	ctx.fillRect(0, 0, 480, 640);
 	// Report frame rate
-	viewport.textBaseline = "top"
-	viewport.font = '16px "Major Mono Display"'
-	viewport.strokeStyle = "white";
-	viewport.fillStyle = "white";
-	viewport.lineWidth = 1;
-	viewport.strokeText("fps: " + (1000 / delta).toFixed(1), 10, 10)
+	ctx.textBaseline = "top"
+	ctx.font = '16px "Major Mono Display"'
+	ctx.strokeStyle = "white";
+	ctx.fillStyle = "white";
+	ctx.lineWidth = 1;
+	ctx.strokeText("fps: " + (1000 / delta).toFixed(1), 10, 10)
 	// Draw stars
-	draw_stars(delta * speed_fac, viewport)
+	draw_stars(delta * speed_fac, ctx)
 	if (!paused) {
 		// Tick all entities
 		for (const entity of entities) {
@@ -44,17 +47,19 @@ while (true) {
 		}
 	}
 	// Draw HUD
-	draw_hud(delta, viewport)
+	draw_hud(delta, ctx)
 	// Draw all entities' background graphics
 	for (const entity of entities) {
-		entity.draw_bg(viewport)
+		entity.draw_bg(ctx)
 	}
 	// Draw all entities' main graphics
 	for (const entity of entities) {
-		entity.draw(viewport)
+		entity.draw(ctx)
 	}
 	// Draw all entities' effectx
 	for (const entity of entities) {
-		entity.draw_fx(viewport)
+		entity.draw_fx(ctx)
 	}
+	// Run controllers
+	tick_player_input()
 }

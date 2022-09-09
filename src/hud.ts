@@ -1,4 +1,5 @@
 import { display_height, display_width } from "./index";
+import { players } from "./player_input";
 
 const hud_margin = 16;
 const hud_lines = 4;
@@ -23,13 +24,16 @@ export function draw_hud(delta: number, ctx: CanvasRenderingContext2D) {
 		ctx.lineWidth = 1
 		ctx.font = `${font_height}px "Major Mono Display"`
 		ctx.strokeStyle = "white"
-		// Only do this if the player is here, otherwise say 'not here'.
-		ctx.strokeText("player " + (cursor[2] + 1).toString(), cursor[0], cursor[1])
-		cursor[1] += font_height + font_margin
-		ctx.strokeText("armr [===========]", cursor[0], cursor[1]);
-		cursor[1] += font_height + font_margin
-		ctx.strokeText("bomb [===========]", cursor[0], cursor[1]);
-		cursor[1] += font_height + font_margin
-		ctx.strokeText("shld [===========]", cursor[0], cursor[1]);
+		if (players[cursor[2]]) {
+			ctx.strokeText("player " + (cursor[2] + 1).toString(), cursor[0], cursor[1])
+			cursor[1] += font_height + font_margin
+			ctx.strokeText("armr [===========]", cursor[0], cursor[1]);
+			cursor[1] += font_height + font_margin
+			ctx.strokeText("bomb [===========]", cursor[0], cursor[1]);
+			cursor[1] += font_height + font_margin
+			ctx.strokeText("shld [===========]", cursor[0], cursor[1]);
+		} else {
+			ctx.strokeText("not here", cursor[0], cursor[1]);
+		}
 	}
 }
