@@ -67,7 +67,7 @@ export class Player {
 			this.movement[0] += 1 * (keys_pressed_map["arrowright"] as number)
 			this.movement[1] -= 1 * (keys_pressed_map["arrowup"] as number)
 			this.movement[1] += 1 * (keys_pressed_map["arrowdown"] as number)
-			this.buttons = [keys_pressed_map['z'], keys_pressed_map['x']]
+			this.buttons = [keys_pressed_map['z'] || false, keys_pressed_map['x'] || false]
 
 			if (keys_pressed_map['escape']) {
 				this.disconnected = true;
