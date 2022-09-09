@@ -62,8 +62,8 @@ class Star {
 		this.position[0] += this.vel[0] * (delta / 1000) * speed_fac
 		this.position[1] += this.vel[1] * (delta / 1000) * speed_fac
 		this.last_position = ([] as number[]).concat(this.position) as [number, number];
-		this.last_position[0] -= this.vel[0] * (1 / 60) * speed_fac
-		this.last_position[1] -= this.vel[1] * (1 / 60) * speed_fac
+		this.last_position[0] -= this.vel[0] * (1 / 20) * speed_fac
+		this.last_position[1] -= this.vel[1] * (1 / 20) * speed_fac
 	}
 
 	draw(ctx: CanvasRenderingContext2D) {
